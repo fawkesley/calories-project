@@ -13,17 +13,23 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
-from django.conf.urls import url, include
+
+from django.conf.urls import patterns, url
+
+from apps.meals import views
 
 
-# from django.contrib import admin  # TODO
+urlpatterns = patterns(
+    '',
 
-urlpatterns = [
-    # url(r'^admin/', include(admin.site.urls)),
+    url(r'^api-token-auth/',
+        'rest_framework_jwt.views.obtain_jwt_token'),
 
-    url(r'^', include('apps.meals.urls')),
+    url(r'^users/$',
+        views.UserList.as_view(),
+        name='user-list',),
 
-    url(r'^api-auth/', include('rest_framework.urls',
-                               namespace='rest_framework'))
-
-]
+    url(r'^users/(?P<username>[\w.@+-]+)/$',
+        views.UserDetail.as_view(),
+        name='user-detail'),
+)
