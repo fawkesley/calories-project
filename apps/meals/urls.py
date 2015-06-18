@@ -19,6 +19,8 @@ from django.conf.urls import patterns, url
 from apps.meals import views
 
 
+USERNAME_REGEX = r'[\w.@+-]+'
+
 urlpatterns = patterns(
     '',
 
@@ -29,7 +31,11 @@ urlpatterns = patterns(
         views.UserList.as_view(),
         name='user-list',),
 
-    url(r'^users/(?P<username>[\w.@+-]+)/$',
+    url(r'^users/(?P<username>' + USERNAME_REGEX + ')/$',
         views.UserDetail.as_view(),
         name='user-detail'),
+
+    url(r'^users/(?P<username>' + USERNAME_REGEX + ')/meals/$',
+        views.MealList.as_view(),
+        name='meal-list'),
 )
