@@ -1,3 +1,66 @@
+## Run Backend
+
+Backend is written in Python / Django.
+
+```
+virtualenv venv
+source venv/bin/activate
+pip install -r requirements.txt
+pip install -r requirements_for_tests.txt
+```
+
+## Test
+
+```
+make test
+```
+
+## Play with the API
+
+### First, make a superuser (admin)
+
+```
+./manage.py createsuperuser --username admin --email admin@admin.com
+```
+
+The following examples assume you set the password to "admin"...
+
+### Get an API token
+
+```
+curl -X POST http://localhost:8000/api-token-auth/ -d '{"username": "admin", "password": "admin"}' -H 'Content-Type: application/json'
+```
+
+For convenience, you can store this in your environment:
+
+```
+export API_TOKEN=...
+```
+
+### Create a User
+
+```
+curl -X POST http://localhost:8000/users/ -d '{"username": "test_001"}' -H 'Content-Type: application/json' -H "Authorization: Bearer ${API_TOKEN}"
+```
+
+### Retrieve a User
+
+```
+curl http://localhost:8000/users/test_001/ -H 'Content-Type: application/json' -H "Authorization: Bearer ${API_TOKEN}"
+```
+
+### Update a user
+
+```
+curl -X PUT http://localhost:8000/users/test_001/ -d '{"username": "test_001", "expected_daily_calories": 1000}' -H 'Content-Type: application/json' -H "Authorization: Bearer ${API_TOKEN}"
+```
+
+### Delete a User
+
+```
+curl -X DELETE http://localhost:8000/users/test_001/ -H 'Content-Type: application/json' -H "Authorization: Bearer ${API_TOKEN}"
+```
+
 ## Requirements
 
 - User must be able to create an account and log in
