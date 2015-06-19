@@ -71,7 +71,7 @@ class MealDetail(MealGetQuerySetMixin, generics.RetrieveUpdateDestroyAPIView):
 
 
 class UserList(generics.CreateAPIView):
-    # Bearing in mind it's create-only
+    # AllowAny is OK as it's unauthenticated & create-only
     permission_classes = (permissions.AllowAny,)
 
     queryset = User.objects.all()
