@@ -38,4 +38,8 @@ urlpatterns = patterns(
     url(r'^users/(?P<username>' + USERNAME_REGEX + ')/meals/$',
         views.MealList.as_view(),
         name='meal-list'),
+
+    url(r'^users/(?P<username>' + USERNAME_REGEX + ')/meals/(?P<pk>[0-9]+)/$',
+        views.MealDetail.as_view(),
+        name='meal-detail'),
 )

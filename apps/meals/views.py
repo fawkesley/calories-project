@@ -11,14 +11,18 @@ class MealGetQuerySetMixin(object):
         This view should return a list of all the purchases for
         the user as determined by the username portion of the URL.
         """
+        self.raise_if_requesting_user_not_target_user()
+
+        target_username = self.kwargs['username']
+        return Meal.objects.filter(owner__username=target_username)
+
+    def raise_if_requesting_user_not_target_user(self):
         query_username = self.kwargs['username']
         requesting_user = self.request.user
 
         if requesting_user.username != query_username:
             if not requesting_user.is_superuser:
                 raise exceptions.PermissionDenied
-
-        return Meal.objects.filter(owner__username=query_username)
 
 
 class MealList(MealGetQuerySetMixin, generics.ListCreateAPIView):
@@ -33,7 +37,9 @@ class MealList(MealGetQuerySetMixin, generics.ListCreateAPIView):
 
         Attach the current user to the serializer before saving.
         """
-        serializer.save(owner=self.request.user)
+        self.raise_if_requesting_user_not_target_user()
+        target_username = self.kwargs['username']
+        serializer.save(owner=User.objects.get(username=target_username))
 
     def get_queryset(self):
         queryset = super(MealList, self).get_queryset()
@@ -57,6 +63,11 @@ class MealList(MealGetQuerySetMixin, generics.ListCreateAPIView):
 
         return queryset
 
+
+class MealDetail(MealGetQuerySetMixin, generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    serializer_class = MealSerializer
 
 
 class UserList(generics.CreateAPIView):
