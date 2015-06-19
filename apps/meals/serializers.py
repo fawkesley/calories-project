@@ -1,6 +1,13 @@
 from django.contrib.auth.models import User
 
 from rest_framework import serializers
+from apps.meals.models import Meal
+
+
+class MealSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Meal
+        fields = ('id', 'date', 'time', 'description', 'calories')
 
 
 class UserSerializer(serializers.ModelSerializer):
