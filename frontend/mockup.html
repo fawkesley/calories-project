@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="Paul M Furley">
+
+    <title>Count Your Calories | Paul M Furley</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="css/calories.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+    <script type="text/javascript" src="http://livejs.com/live.js"></script>
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <div class="container">
+        <h1>Count your Calories!</h1>
+        <p>
+        This is a demonstration app to showcase a backend API and fully static
+        (AJAX) frontend. You might have guessed there's been no UI/UX input :
+        </p>
+
+        <p>
+        The backend is written in Python 3.4 using Django 1.8 and Django Rest
+        Framework 3.1.3. It uses JSON Web Tokens for Authentication.
+        </p>
+
+        <p>
+        The frontend is written using Bootstrap 3 and React 0.13.
+        <p><a class="btn btn-primary btn-lg" href="http://paulfurley.com" role="button">About Me &raquo;</a></p>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Expected daily calories</h2>
+          <form class="form-inline">
+            <div class="form-group">
+              <label class="sr-only" for="expectedDailyCalories">From date</label>
+              <input type="number" class="form-control" id="expectedDailyCalories" value="2000">
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <h2>Filter Date</h2>
+          <form class="form-inline">
+            <div class="form-group">
+              <label class="sr-only" for="inputFromDate">From date</label>
+              <input type="date" class="form-control" id="inputFromDate">
+            </div>
+            <div class="form-group">
+              <label class="sr-only" for="inputToDate">To date</label>
+              <input type="date" class="form-control" id="inputToDate">
+            </div>
+          </form>
+        </div>
+        <div class="col-md-6">
+          <h2>Filter Time</h2>
+          <form class="form-inline">
+            <div class="form-group">
+              <label class="sr-only" for="inputFromTime">From time</label>
+              <input type="time" class="form-control" id="inputFromTime">
+            </div>
+            <div class="form-group">
+              <label class="sr-only" for="inputToTime">To time</label>
+              <input type="time" class="form-control" id="inputToTime">
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h2>2015-01-01 <span class="small highlight-green"> total calories: 1300</span></h3>
+
+          <table class="table">
+            <tbody>
+            <tr>
+              <td>09:00</td>
+              <td>Cheese burger and McFlurry</td>
+              <td>800</td>
+              <td><i class="fa fa-times"></i></td>
+            </tr>
+            <tr>
+              <td>14:00</td>
+              <td>Chips and cheese</td>
+              <td>500</td>
+              <td><i class="fa fa-times"></i></td>
+            </tr>
+            <tr>
+              <td>20:00</td>
+              <td>Pizza</td>
+              <td>800</td>
+              <td><i class="fa fa-times"></i></td>
+            </tr>
+            </tbody>
+          </table>
+          <button type="button" class="btn btn-success pull-right"><i class="fa fa-plus"></i> Add</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <h2>2015-01-01 <span class="small highlight-red"> total calories: 2100</span></h3>
+
+          <table class="table">
+            <tbody>
+            <tr>
+              <td>09:00</td>
+              <td>Eggs on toast</td>
+              <td>200</td>
+              <td><i class="fa fa-times"></i></td>
+            </tr>
+            <tr>
+              <td>13:30</td>
+              <td>Ham sandwich</td>
+              <td>300</td>
+              <td><i class="fa fa-times"></i></td>
+            </tr>
+            <tr>
+              <td>19:00</td>
+              <td>Pizza</td>
+              <td>800</td>
+              <td><i class="fa fa-times"></i></td>
+            </tr>
+            </tbody>
+          </table>
+          <button type="button" class="btn btn-success pull-right"><i class="fa fa-plus"></i> Add</button>
+        </div>
+      </div>
+
+    <hr>
+
+      <footer>
+        <p>&copy; Paul M Furley 2015</p>
+      </footer>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
