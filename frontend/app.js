@@ -56,29 +56,26 @@ var DayTitle = React.createClass({
   }
 });
 
+var MealRow = React.createClass({
+  render: function() {
+    return (
+      <tr>
+        <td>09:00</td>
+        <td>Cheese burger and McFlurry</td>
+        <td>800</td>
+        <td><i className="fa fa-times"></i></td>
+      </tr>
+    );
+  }
+});
+
 var MealsTable = React.createClass({
   render: function() {
     return (
       <table className="table">
         <tbody>
-        <tr>
-          <td>09:00</td>
-          <td>Cheese burger and McFlurry</td>
-          <td>800</td>
-          <td><i className="fa fa-times"></i></td>
-        </tr>
-        <tr>
-          <td>14:00</td>
-          <td>Chips and cheese</td>
-          <td>500</td>
-          <td><i className="fa fa-times"></i></td>
-        </tr>
-        <tr>
-          <td>20:00</td>
-          <td>Pizza</td>
-          <td>800</td>
-          <td><i className="fa fa-times"></i></td>
-        </tr>
+        <MealRow />
+
         </tbody>
       </table>
       );
