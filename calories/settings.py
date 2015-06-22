@@ -40,12 +40,14 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'corsheaders',
 
     'apps.meals',
 )
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -120,3 +122,21 @@ JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
 }
+
+# Cross-origin Resource Sharing (CORS)
+# See https://github.com/ottoyiu/django-cors-headers/ and
+#     http://www.html5rocks.com/en/tutorials/cors/
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOW_METHODS = (
+    'GET',
+    'PUT',
+    'POST',
+    'DELETE',
+    'OPTIONS',
+)
+
+CORS_ALLOW_CREDENTIALS = False
+
+CORS_PREFLIGHT_MAX_AGE = 3 * 3600
