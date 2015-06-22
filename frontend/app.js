@@ -152,8 +152,6 @@ var DaySection = React.createClass({
                     expectedDailyCalories={this.props.expectedDailyCalories} />
           <MealsTable meals={this.props.meals}
                       deleteMealId={this.props.deleteMealId} />
-
-          <button type="button" className="btn btn-success pull-right"><i className="fa fa-plus"></i> Add</button>
         </div>
       </div>
       );
@@ -191,6 +189,55 @@ var CalendarSection = React.createClass({
   }
 });
 
+
+var AddMealSection = React.createClass({
+
+  handleAddButton: function() {
+    this.props.addMeal({
+      date: this.refs.newMealDateInput.getDOMNode().value,
+      time: this.refs.newMealTimeInput.getDOMNode().value,
+      description: this.refs.newMealDescriptionInput.getDOMNode().value,
+      calories: this.refs.newMealCaloriesInput.getDOMNode().value
+    });
+  },
+
+  render: function() {
+    return (
+      <div className="container">
+        <h3>Add a meal</h3>
+        <form className="form-inline">
+          <div className="form-group">
+            <label className="sr-only" htmlFor="expectedDailyCalories">From date</label>
+            <input type="date" className="form-control"
+                   defaultValue={moment().format(DATE_FORMAT)}
+                   id="newMealDateInput"
+                   ref="newMealDateInput" />
+
+            <input type="time" className="form-control"
+                   defaultValue={moment().format('HH:[00]')}
+                   id="newMealTimeInput"
+                   ref="newMealTimeInput" />
+
+            <input type="text" className="form-control"
+                   placeholder="Enter description..."
+                   id="newMealDescriptionInput"
+                   ref="newMealDescriptionInput" />
+
+            <input type="number" className="form-control"
+                   defaultValue={500}
+                   step={100}
+                   id="newMealCaloriesInput"
+                   ref="newMealCaloriesInput" />
+
+            <a className="btn btn-success" onClick={this.handleAddButton} >
+              <i className="fa fa-plus"></i> Add
+            </a>
+          </div>
+        </form>
+      </div>
+    );
+  }
+});
 
 var CalorieCounterApp = React.createClass({
   getInitialState: function() {
@@ -286,6 +333,17 @@ var CalorieCounterApp = React.createClass({
     this.requestMealsForUser(config);
   },
 
+  addMeal: function(mealData) {
+    this.callApi({
+        method: 'POST',
+        partialUrl: '/users/' + this.state.username + '/meals/',
+        data: mealData,
+        success: function(data) {
+          this.requestMealsForUser(null);
+        }.bind(this)
+    });
+  },
+
   deleteMealId: function(mealId) {
     console.log('Delete meal ID ' + mealId);
 
@@ -330,6 +388,7 @@ var CalorieCounterApp = React.createClass({
       <CalendarSection meals={this.state.meals}
                        expectedDailyCalories={this.state.expectedDailyCalories}
                        deleteMealId={this.deleteMealId} />
+      <AddMealSection addMeal={this.addMeal} />
     </div>
     );
   }
