@@ -148,6 +148,36 @@ var CalendarSection = React.createClass({
 
 
 var CalorieCounterApp = React.createClass({
+  getInitialState: function() {
+    return {
+      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0MzUwNjU4MzEsInVzZXJuYW1lIjoiYm9iIiwiZW1haWwiOiIiLCJ1c2VyX2lkIjoyfQ.8NyoDbtR-UqxqUP9M5BFFQlWrbImL37FuAv4nv2uFNw',
+      username: 'bob',
+      meals: []
+    }
+  },
+
+  componentDidMount: function() {
+    console.log('Requesting meals...');
+    this.requestMealsForUser();
+  },
+
+  requestMealsForUser: function() {
+    $.ajax({
+      url: API + '/users/' + this.state.username + '/meals/',
+      beforeSend: function(xhr) {
+        xhr.setRequestHeader("Authorization", "Bearer " + this.state.token);
+      }.bind(this),
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+        this.setState({meals: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+
   render: function() {
     console.log(this.props.config);
     return (
@@ -157,57 +187,12 @@ var CalorieCounterApp = React.createClass({
                      toDate={this.props.config.toDate}
                      fromTime={this.props.config.fromTime}
                      toTime={this.props.config.toTime} />
-      <CalendarSection meals={this.props.meals}
+      <CalendarSection meals={this.state.meals}
                        expectedDailyCalories={this.props.config.expectedDailyCalories}/>
     </div>
     );
   }
 });
-
-var MEALS = [
-  {
-    "id": 1,
-    "date": "2015-01-01",
-    "time": "09:00:00",
-    "description": "Cheese burger and McFlurry",
-    "calories": 800
-  },
-  {
-    "id": 2,
-    "date": "2015-01-01",
-    "time": "14:00:00",
-    "description": "Chips and cheese",
-    "calories": 500
-  },
-  {
-    "id": 3,
-    "date": "2015-01-01",
-    "time": "20:00:00",
-    "description": "Pizza",
-    "calories": 800
-  },
-  {
-    "id": 4,
-    "date": "2015-01-02",
-    "time": "09:00:00",
-    "description": "Eggs on toast",
-    "calories": 200
-  },
-  {
-    "id": 5,
-    "date": "2015-01-02",
-    "time": "13:30:00",
-    "description": "Ham sandwich",
-    "calories": 300
-  },
-  {
-    "id": 6,
-    "date": "2015-01-02",
-    "time": "19:00:00",
-    "description": "Pizza",
-    "calories": 800
-  }
-];
 
 
 var CONFIG = {
@@ -218,6 +203,8 @@ var CONFIG = {
   toTime: '23:59'
 };
 
+var API = 'http://localhost:8000';
+
 React.render(
-    <CalorieCounterApp config={CONFIG} meals={MEALS} />,
+    <CalorieCounterApp config={CONFIG} />,
     document.getElementById('calorieCounterAppPlaceholder'));
