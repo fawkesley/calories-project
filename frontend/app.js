@@ -56,6 +56,34 @@ var DayTitle = React.createClass({
   }
 });
 
+var MealsTable = React.createClass({
+  render: function() {
+    return (
+      <table className="table">
+        <tbody>
+        <tr>
+          <td>09:00</td>
+          <td>Cheese burger and McFlurry</td>
+          <td>800</td>
+          <td><i className="fa fa-times"></i></td>
+        </tr>
+        <tr>
+          <td>14:00</td>
+          <td>Chips and cheese</td>
+          <td>500</td>
+          <td><i className="fa fa-times"></i></td>
+        </tr>
+        <tr>
+          <td>20:00</td>
+          <td>Pizza</td>
+          <td>800</td>
+          <td><i className="fa fa-times"></i></td>
+        </tr>
+        </tbody>
+      </table>
+      );
+  }
+});
 
 var DaySection = React.createClass({
   render: function() {
@@ -64,29 +92,8 @@ var DaySection = React.createClass({
 
         <div className="col-md-12">
           <DayTitle />
+          <MealsTable />
 
-          <table className="table">
-            <tbody>
-            <tr>
-              <td>09:00</td>
-              <td>Cheese burger and McFlurry</td>
-              <td>800</td>
-              <td><i className="fa fa-times"></i></td>
-            </tr>
-            <tr>
-              <td>14:00</td>
-              <td>Chips and cheese</td>
-              <td>500</td>
-              <td><i className="fa fa-times"></i></td>
-            </tr>
-            <tr>
-              <td>20:00</td>
-              <td>Pizza</td>
-              <td>800</td>
-              <td><i className="fa fa-times"></i></td>
-            </tr>
-            </tbody>
-          </table>
           <button type="button" className="btn btn-success pull-right"><i className="fa fa-plus"></i> Add</button>
         </div>
       </div>
