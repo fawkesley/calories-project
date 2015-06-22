@@ -17,6 +17,19 @@ make test
 
 ## Play with the API
 
+### Migrate your database
+
+```
+make migrate_database
+```
+
+
+### Load demo fixtures
+
+```
+make load_fixtures
+```
+
 ### First, make a superuser (admin)
 
 ```
@@ -28,7 +41,7 @@ The following examples assume you set the password to "admin"...
 ### Get an API token
 
 ```
-curl -X POST http://localhost:8000/api-token-auth/ -d '{"username": "admin", "password": "admin"}' -H 'Content-Type: application/json'
+curl -X POST http://localhost:8000/api-token-auth/ -d '{"username": "bob", "password": "bobspassword"}' -H 'Content-Type: application/json'
 ```
 
 For convenience, you can store this in your environment:
@@ -86,8 +99,8 @@ curl -X DELETE http://localhost:8000/users/test_001/ -H 'Content-Type: applicati
   the API).
 - In any case you should be able to explain how a REST API works and
   demonstrate that by creating functional tests that use the REST Layer
-  directly.  
+  directly.
 - NOTE: Please keep in mind that this is the project that will be
   used to evaluate your skills. The project will be evaluated as if you are
   delivering it to a customer. We expect you to make sure that the app is fully
-  functional and doesn’t have any obvious missing pieces. 
+  functional and doesn’t have any obvious missing pieces.

@@ -1,0 +1,104 @@
+[
+{
+    "fields": {
+        "date_joined": "2015-06-18T13:41:29.057Z",
+        "last_login": "2015-06-18T13:58:32.042Z",
+        "user_permissions": [],
+        "last_name": "",
+        "is_active": true,
+        "groups": [],
+        "username": "admin",
+        "first_name": "",
+        "password": "pbkdf2_sha256$20000$zj3oKTgsgtiY$nFCNuR2jijX+oCa1CRLv33JjFT9WSTiOyLDjQa0k/O4=",
+        "is_superuser": true,
+        "is_staff": true,
+        "email": "admin@admin.com"
+    },
+    "model": "auth.user",
+    "pk": 1
+},
+{
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+        "date_joined": "2015-06-18T10:05:36.236Z",
+        "email": "",
+        "last_name": "",
+        "user_permissions": [],
+        "groups": [],
+        "password": "pbkdf2_sha256$20000$FwMhVyvZklIl$pbWMfUCbojCvrR2wg+5YJthXSnaMLwgHaCdXFpx98go=",
+        "is_staff": true,
+        "username": "bob",
+        "is_superuser": true,
+        "is_active": true,
+        "first_name": "",
+        "last_login": "2015-06-18T12:47:55.407Z"
+    }
+},
+{
+    "fields": {
+        "calories": 800,
+        "owner": 2,
+        "description": "Cheese burger and McFlurry",
+        "date": "2015-06-20",
+        "time": "09:00:00"
+    },
+    "model": "meals.meal",
+    "pk": 9
+},
+{
+    "fields": {
+        "calories": 500,
+        "owner": 2,
+        "description": "Chips and cheese",
+        "date": "2015-06-20",
+        "time": "14:00:00"
+    },
+    "model": "meals.meal",
+    "pk": 10
+},
+{
+    "fields": {
+        "calories": 800,
+        "owner": 2,
+        "description": "Pizza",
+        "date": "2015-06-20",
+        "time": "20:00:00"
+    },
+    "model": "meals.meal",
+    "pk": 11
+},
+{
+    "fields": {
+        "calories": 200,
+        "owner": 2,
+        "description": "Eggs on toast",
+        "date": "2015-06-21",
+        "time": "09:00:00"
+    },
+    "model": "meals.meal",
+    "pk": 12
+},
+{
+    "fields": {
+        "calories": 300,
+        "owner": 2,
+        "description": "Ham sandwich",
+        "date": "2015-06-21",
+        "time": "13:30:00"
+    },
+    "model": "meals.meal",
+    "pk": 13
+},
+{
+    "fields": {
+        "calories": 800,
+        "owner": 2,
+        "description": "Pizza",
+        "date": "2015-06-21",
+        "time": "19:00:00"
+    },
+    "model": "meals.meal",
+    "pk": 14
+}
+]
