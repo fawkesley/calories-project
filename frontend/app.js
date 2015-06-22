@@ -48,71 +48,49 @@ var ConfigSection = React.createClass({
   }
 });
 
+var DaySection = React.createClass({
+  render: function() {
+    return (
+      <div className="row">
+
+        <div className="col-md-12">
+          <h2>2015-01-01 <span className="small highlight-green"> total calories: 1300</span></h2>
+
+          <table className="table">
+            <tbody>
+            <tr>
+              <td>09:00</td>
+              <td>Cheese burger and McFlurry</td>
+              <td>800</td>
+              <td><i className="fa fa-times"></i></td>
+            </tr>
+            <tr>
+              <td>14:00</td>
+              <td>Chips and cheese</td>
+              <td>500</td>
+              <td><i className="fa fa-times"></i></td>
+            </tr>
+            <tr>
+              <td>20:00</td>
+              <td>Pizza</td>
+              <td>800</td>
+              <td><i className="fa fa-times"></i></td>
+            </tr>
+            </tbody>
+          </table>
+          <button type="button" className="btn btn-success pull-right"><i className="fa fa-plus"></i> Add</button>
+        </div>
+      </div>
+      );
+  }
+});
 
 var CalendarSection = React.createClass({
   render: function() {
     return (
       <div className="container">
-        <div className="row">
-          <div className="col-md-12">
-            <h2>2015-01-01 <span className="small highlight-green"> total calories: 1300</span></h2>
-
-            <table className="table">
-              <tbody>
-              <tr>
-                <td>09:00</td>
-                <td>Cheese burger and McFlurry</td>
-                <td>800</td>
-                <td><i className="fa fa-times"></i></td>
-              </tr>
-              <tr>
-                <td>14:00</td>
-                <td>Chips and cheese</td>
-                <td>500</td>
-                <td><i className="fa fa-times"></i></td>
-              </tr>
-              <tr>
-                <td>20:00</td>
-                <td>Pizza</td>
-                <td>800</td>
-                <td><i className="fa fa-times"></i></td>
-              </tr>
-              </tbody>
-            </table>
-            <button type="button" className="btn btn-success pull-right"><i className="fa fa-plus"></i> Add</button>
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-md-12">
-            <h2>2015-01-01 <span className="small highlight-red"> total calories: 2100</span></h2>
-
-            <table className="table">
-              <tbody>
-              <tr>
-                <td>09:00</td>
-                <td>Eggs on toast</td>
-                <td>200</td>
-                <td><i className="fa fa-times"></i></td>
-              </tr>
-              <tr>
-                <td>13:30</td>
-                <td>Ham sandwich</td>
-                <td>300</td>
-                <td><i className="fa fa-times"></i></td>
-              </tr>
-              <tr>
-                <td>19:00</td>
-                <td>Pizza</td>
-                <td>800</td>
-                <td><i className="fa fa-times"></i></td>
-              </tr>
-              </tbody>
-            </table>
-            <button type="button" className="btn btn-success pull-right"><i className="fa fa-plus"></i> Add</button>
-          </div>
-        </div>
-
+        <DaySection />
+        <DaySection />
       </div>
       );
   }
