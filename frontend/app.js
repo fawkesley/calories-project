@@ -48,13 +48,22 @@ var ConfigSection = React.createClass({
   }
 });
 
+var DayTitle = React.createClass({
+  render: function() {
+    return (
+        <h2>2015-01-01 <span className="small highlight-green"> total calories: 1300</span></h2>
+      );
+  }
+});
+
+
 var DaySection = React.createClass({
   render: function() {
     return (
       <div className="row">
 
         <div className="col-md-12">
-          <h2>2015-01-01 <span className="small highlight-green"> total calories: 1300</span></h2>
+          <DayTitle />
 
           <table className="table">
             <tbody>
