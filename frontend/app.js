@@ -3,13 +3,20 @@
 var ConfigSection = React.createClass({
 
   handleChangeCalories: function(event) {
-    console.log('handleCaloriesChange()');
-    console.log('expectedDailyCalories input: ' + this.refs.expectedDailyCaloriesInput);
-
     this.props.updateExpectedDailyCalories(this.refs.expectedDailyCaloriesInput.getDOMNode().value);
   },
 
+  handleChangeDateTime: function(event) {
+    this.props.updateDateTimeFilters({
+      fromDate: this.refs.fromDateInput.getDOMNode().value,
+      toDate: this.refs.toDateInput.getDOMNode().value,
+      fromTime: this.refs.fromTimeInput.getDOMNode().value,
+      toTime: this.refs.toTimeInput.getDOMNode().value
+    });
+  },
+
   render: function() {
+
     return (
       <div className="container">
         <div className="row">
@@ -32,12 +39,18 @@ var ConfigSection = React.createClass({
             <h2>Filter Date</h2>
             <form className="form-inline">
               <div className="form-group">
-                <label className="sr-only" htmlFor="inputFromDate">From date</label>
-                <input type="date" className="form-control" id="inputFromDate" value={this.props.fromDate}></input>
+                <label className="sr-only" htmlFor="fromDateInput">From date</label>
+                <input type="date" className="form-control" id="fromDateInput"
+                       ref="fromDateInput"
+                       value={this.props.fromDate}
+                       onChange={this.handleChangeDateTime} ></input>
               </div>
               <div className="form-group">
-                <label className="sr-only" htmlFor="inputToDate">To date</label>
-                <input type="date" className="form-control" id="inputToDate" value={this.props.toDate}></input>
+                <label className="sr-only" htmlFor="toDateInput">To date</label>
+                <input type="date" className="form-control" id="toDateInput"
+                       ref="toDateInput"
+                       value={this.props.toDate}
+                       onChange={this.handleChangeDateTime}></input>
               </div>
             </form>
           </div>
@@ -45,12 +58,18 @@ var ConfigSection = React.createClass({
             <h2>Filter Time</h2>
             <form className="form-inline">
               <div className="form-group">
-                <label className="sr-only" htmlFor="inputFromTime">From time</label>
-                <input type="time" className="form-control" id="inputFromTime" value={this.props.fromTime}></input>
+                <label className="sr-only" htmlFor="fromTimeInput">From time</label>
+                <input type="time" className="form-control" id="fromTimeInput"
+                       ref="fromTimeInput"
+                       value={this.props.fromTime}
+                       onChange={this.handleChangeDateTime} ></input>
               </div>
               <div className="form-group">
-                <label className="sr-only" htmlFor="inputToTime">To time</label>
-                <input type="time" className="form-control" id="inputToTime" value={this.props.toTime}></input>
+                <label className="sr-only" htmlFor="toTimeInput">To time</label>
+                <input type="time" className="form-control" id="toTimeInput"
+                       ref="toTimeInput"
+                       value={this.props.toTime}
+                       onChange={this.handleChangeDateTime}></input>
               </div>
             </form>
           </div>
@@ -179,7 +198,12 @@ var CalorieCounterApp = React.createClass({
 
   componentDidMount: function() {
     this.loadUserConfig();
-    this.requestMealsForUser();
+    this.requestMealsForUser({
+      fromDate: this.state.fromDate,
+      toDate: this.state.toDate,
+      fromTime: this.state.fromTime,
+      toTime: this.state.toTime
+    });
   },
 
   loadUserConfig() {
@@ -193,14 +217,14 @@ var CalorieCounterApp = React.createClass({
     });
   },
 
-  requestMealsForUser: function() {
+  requestMealsForUser: function(config) {
 
     var url = '/users/' + this.state.username + '/meals/?';
     url += $.param({
-      to_date: this.state.toDate,
-      from_date: this.state.fromDate,
-      to_time: this.state.toTime,
-      from_time: this.state.fromTime
+      to_date: config.toDate,
+      from_date: config.fromDate,
+      to_time: config.toTime,
+      from_time: config.fromTime
     });
 
     this.callApi({
@@ -231,13 +255,27 @@ var CalorieCounterApp = React.createClass({
     });
   },
 
+  updateDateTimeFilters: function(config) {
+    console.log('updateDateTimeFilters ' + config.fromDate + ' '
+                + config.toDate + ' ' + config.fromTime + ' ' + config.toTime);
+
+    this.setState({
+      fromDate: config.fromDate,
+      toDate: config.toDate,
+      fromTime: config.fromTime,
+      toTime: config.toTime
+    });
+
+    this.requestMealsForUser(config);
+  },
+
   callApi: function(settings) {
     settings.url = API + settings.partialUrl;
 
     settings.dataType = 'json',
     settings.cache = false;
     settings.error = function(xhr, status, err) {
-      console.error(this.props.url, status, err.toString());
+      console.error(settings.url, status, err.toString());
     }.bind(this)
 
    settings.beforeSend = function(xhr) {
@@ -258,7 +296,8 @@ var CalorieCounterApp = React.createClass({
                      toDate={this.state.toDate}
                      fromTime={this.state.fromTime}
                      toTime={this.state.toTime}
-                     updateExpectedDailyCalories={this.updateExpectedDailyCalories} />
+                     updateExpectedDailyCalories={this.updateExpectedDailyCalories}
+                     updateDateTimeFilters={this.updateDateTimeFilters} />
       <CalendarSection meals={this.state.meals}
                        expectedDailyCalories={this.state.expectedDailyCalories}/>
     </div>
