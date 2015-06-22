@@ -1,5 +1,13 @@
 
 var ConfigSection = React.createClass({
+
+  handleChangeCalories: function(event) {
+    console.log('handleCaloriesChange()');
+    console.log('expectedDailyCalories input: ' + this.refs.expectedDailyCaloriesInput);
+
+    this.props.updateExpectedDailyCalories(this.refs.expectedDailyCaloriesInput.getDOMNode().value);
+  },
+
   render: function() {
     return (
       <div className="container">
@@ -9,7 +17,11 @@ var ConfigSection = React.createClass({
             <form className="form-inline">
               <div className="form-group">
                 <label className="sr-only" htmlFor="expectedDailyCalories">From date</label>
-                <input type="number" className="form-control" id="expectedDailyCalories" value={this.props.expectedDailyCalories} ></input>
+                <input type="number" className="form-control" step={100}
+                       id="expectedDailyCalories"
+                       ref="expectedDailyCaloriesInput"
+                       value={this.props.expectedDailyCalories}
+                       onChange={this.handleChangeCalories} ></input>
               </div>
             </form>
           </div>
@@ -196,6 +208,11 @@ var CalorieCounterApp = React.createClass({
     });
   },
 
+  updateExpectedDailyCalories: function(newExpectedDailyCalories) {
+    console.log('updateExpectedDailyCalories ' + newExpectedDailyCalories);
+    this.setState({expectedDailyCalories: newExpectedDailyCalories});
+  },
+
   render: function() {
     console.log('fromDate: ' + this.state.fromDate + ' toDate: ' + this.state.toDate);
 
@@ -205,7 +222,8 @@ var CalorieCounterApp = React.createClass({
                      fromDate={this.state.fromDate}
                      toDate={this.state.toDate}
                      fromTime={this.state.fromTime}
-                     toTime={this.state.toTime} />
+                     toTime={this.state.toTime}
+                     updateExpectedDailyCalories={this.updateExpectedDailyCalories} />
       <CalendarSection meals={this.state.meals}
                        expectedDailyCalories={this.state.expectedDailyCalories}/>
     </div>
