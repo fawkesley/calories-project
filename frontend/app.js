@@ -178,40 +178,74 @@ var CalorieCounterApp = React.createClass({
   },
 
   componentDidMount: function() {
+    this.loadUserConfig();
     this.requestMealsForUser();
+  },
+
+  loadUserConfig() {
+
+    this.callApi({
+        method: 'GET',
+        partialUrl: '/users/' + this.state.username + '/',
+        success: function(data) {
+          this.setState({expectedDailyCalories: data['expected_daily_calories']})
+        }.bind(this)
+    });
   },
 
   requestMealsForUser: function() {
 
-    var url = API + '/users/' + this.state.username + '/meals/?';
+    var url = '/users/' + this.state.username + '/meals/?';
     url += $.param({
       to_date: this.state.toDate,
       from_date: this.state.fromDate,
       to_time: this.state.toTime,
       from_time: this.state.fromTime
-   });
+    });
 
-    console.log(url);
-
-    $.ajax({
-      url: url,
-      beforeSend: function(xhr) {
-        xhr.setRequestHeader("Authorization", "Bearer " + this.state.token);
-      }.bind(this),
-      dataType: 'json',
-      cache: false,
-      success: function(data) {
-        this.setState({meals: data});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
+    this.callApi({
+        partialUrl: url,
+        success: function(data) {
+          this.setState({meals: data});
+        }.bind(this)
     });
   },
 
   updateExpectedDailyCalories: function(newExpectedDailyCalories) {
     console.log('updateExpectedDailyCalories ' + newExpectedDailyCalories);
     this.setState({expectedDailyCalories: newExpectedDailyCalories});
+
+    var data = {
+      'username': this.state.username,
+      'expected_daily_calories': newExpectedDailyCalories
+    }
+
+    this.callApi({
+        method: 'PUT',
+        partialUrl: '/users/' + this.state.username + '/',
+        data: data,
+        success: function(data) {
+          console.log('Successfully updated user expected_daily_calories');
+          this.setState({expectedDailyCalories: data['expected_daily_calories']});
+        }.bind(this)
+    });
+  },
+
+  callApi: function(settings) {
+    settings.url = API + settings.partialUrl;
+
+    settings.dataType = 'json',
+    settings.cache = false;
+    settings.error = function(xhr, status, err) {
+      console.error(this.props.url, status, err.toString());
+    }.bind(this)
+
+   settings.beforeSend = function(xhr) {
+        xhr.setRequestHeader("Authorization", "Bearer " + this.state.token);
+    }.bind(this),
+
+    console.log(settings);
+    $.ajax(settings);
   },
 
   render: function() {
