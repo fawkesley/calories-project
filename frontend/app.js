@@ -1,8 +1,7 @@
 
-var CalorieCounterApp = React.createClass({
+var ConfigSection = React.createClass({
   render: function() {
     return (
-    <div>
       <div className="container">
         <div className="row">
           <div className="col-md-12">
@@ -45,6 +44,16 @@ var CalorieCounterApp = React.createClass({
         </div>
 
       </div>
+      );
+  }
+});
+
+
+var CalorieCounterApp = React.createClass({
+  render: function() {
+    return (
+    <div>
+      <ConfigSection />
 
       <div className="container">
         <div className="row">
