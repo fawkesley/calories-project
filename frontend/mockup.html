@@ -24,6 +24,7 @@
 
     <script src="js/react-0.13.3/build/react.js"></script>
     <script src="js/react-0.13.3/build/JSXTransformer.js"></script>
+    <script type="text/jsx" src="app.js"></script>
 
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -55,113 +56,9 @@
       </div>
     </div>
 
-    <div>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <h2>Expected daily calories</h2>
-            <form class="form-inline">
-              <div class="form-group">
-                <label class="sr-only" for="expectedDailyCalories">From date</label>
-                <input type="number" class="form-control" id="expectedDailyCalories" value="2000">
-              </div>
-            </form>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <h2>Filter Date</h2>
-            <form class="form-inline">
-              <div class="form-group">
-                <label class="sr-only" for="inputFromDate">From date</label>
-                <input type="date" class="form-control" id="inputFromDate">
-              </div>
-              <div class="form-group">
-                <label class="sr-only" for="inputToDate">To date</label>
-                <input type="date" class="form-control" id="inputToDate">
-              </div>
-            </form>
-          </div>
-          <div class="col-md-6">
-            <h2>Filter Time</h2>
-            <form class="form-inline">
-              <div class="form-group">
-                <label class="sr-only" for="inputFromTime">From time</label>
-                <input type="time" class="form-control" id="inputFromTime">
-              </div>
-              <div class="form-group">
-                <label class="sr-only" for="inputToTime">To time</label>
-                <input type="time" class="form-control" id="inputToTime">
-              </div>
-            </form>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <h2>2015-01-01 <span class="small highlight-green"> total calories: 1300</span></h3>
-
-            <table class="table">
-              <tbody>
-              <tr>
-                <td>09:00</td>
-                <td>Cheese burger and McFlurry</td>
-                <td>800</td>
-                <td><i class="fa fa-times"></i></td>
-              </tr>
-              <tr>
-                <td>14:00</td>
-                <td>Chips and cheese</td>
-                <td>500</td>
-                <td><i class="fa fa-times"></i></td>
-              </tr>
-              <tr>
-                <td>20:00</td>
-                <td>Pizza</td>
-                <td>800</td>
-                <td><i class="fa fa-times"></i></td>
-              </tr>
-              </tbody>
-            </table>
-            <button type="button" class="btn btn-success pull-right"><i class="fa fa-plus"></i> Add</button>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-12">
-            <h2>2015-01-01 <span class="small highlight-red"> total calories: 2100</span></h3>
-
-            <table class="table">
-              <tbody>
-              <tr>
-                <td>09:00</td>
-                <td>Eggs on toast</td>
-                <td>200</td>
-                <td><i class="fa fa-times"></i></td>
-              </tr>
-              <tr>
-                <td>13:30</td>
-                <td>Ham sandwich</td>
-                <td>300</td>
-                <td><i class="fa fa-times"></i></td>
-              </tr>
-              <tr>
-                <td>19:00</td>
-                <td>Pizza</td>
-                <td>800</td>
-                <td><i class="fa fa-times"></i></td>
-              </tr>
-              </tbody>
-            </table>
-            <button type="button" class="btn btn-success pull-right"><i class="fa fa-plus"></i> Add</button>
-          </div>
-        </div>
-
-      </div>
+    <div id="calorieCounterAppPlaceholder">
     </div>
+
 
     <div class="container">
     <hr>
