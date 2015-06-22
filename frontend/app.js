@@ -149,21 +149,39 @@ var CalendarSection = React.createClass({
 
 var CalorieCounterApp = React.createClass({
   getInitialState: function() {
+    var dateNow = moment();
+    var thirtyDaysAgo = moment(dateNow).subtract(30, 'days');
+
     return {
       token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0MzUwNjU4MzEsInVzZXJuYW1lIjoiYm9iIiwiZW1haWwiOiIiLCJ1c2VyX2lkIjoyfQ.8NyoDbtR-UqxqUP9M5BFFQlWrbImL37FuAv4nv2uFNw',
       username: 'bob',
-      meals: []
+      meals: [],
+      expectedDailyCalories: 2000,
+      fromDate: thirtyDaysAgo.format(DATE_FORMAT),
+      toDate: dateNow.format(DATE_FORMAT),
+      fromTime: '00:00',
+      toTime: '23:59'
     }
   },
 
   componentDidMount: function() {
-    console.log('Requesting meals...');
     this.requestMealsForUser();
   },
 
   requestMealsForUser: function() {
+
+    var url = API + '/users/' + this.state.username + '/meals/?';
+    url += $.param({
+      to_date: this.state.toDate,
+      from_date: this.state.fromDate,
+      to_time: this.state.toTime,
+      from_time: this.state.fromTime
+   });
+
+    console.log(url);
+
     $.ajax({
-      url: API + '/users/' + this.state.username + '/meals/',
+      url: url,
       beforeSend: function(xhr) {
         xhr.setRequestHeader("Authorization", "Bearer " + this.state.token);
       }.bind(this),
@@ -179,32 +197,26 @@ var CalorieCounterApp = React.createClass({
   },
 
   render: function() {
-    console.log(this.props.config);
+    console.log('fromDate: ' + this.state.fromDate + ' toDate: ' + this.state.toDate);
+
     return (
     <div>
-      <ConfigSection expectedDailyCalories={this.props.config.expectedDailyCalories}
-                     fromDate={this.props.config.fromDate}
-                     toDate={this.props.config.toDate}
-                     fromTime={this.props.config.fromTime}
-                     toTime={this.props.config.toTime} />
+      <ConfigSection expectedDailyCalories={this.state.expectedDailyCalories}
+                     fromDate={this.state.fromDate}
+                     toDate={this.state.toDate}
+                     fromTime={this.state.fromTime}
+                     toTime={this.state.toTime} />
       <CalendarSection meals={this.state.meals}
-                       expectedDailyCalories={this.props.config.expectedDailyCalories}/>
+                       expectedDailyCalories={this.state.expectedDailyCalories}/>
     </div>
     );
   }
 });
 
 
-var CONFIG = {
-  expectedDailyCalories: 2000,
-  fromDate: '2015-01-01',
-  toDate: '2015-01-02',
-  fromTime: '00:00',
-  toTime: '23:59'
-};
-
 var API = 'http://localhost:8000';
+var DATE_FORMAT = 'YYYY-MM-DD';
 
 React.render(
-    <CalorieCounterApp config={CONFIG} />,
+    <CalorieCounterApp />,
     document.getElementById('calorieCounterAppPlaceholder'));
