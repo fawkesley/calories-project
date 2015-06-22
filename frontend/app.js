@@ -97,13 +97,17 @@ var DayTitle = React.createClass({
 });
 
 var MealRow = React.createClass({
+  handleClickDelete: function() {
+    this.props.deleteMealId(this.props.id);
+  },
+
   render: function() {
     return (
       <tr>
         <td>{this.props.time}</td>
         <td>{this.props.description}</td>
         <td>{this.props.calories}</td>
-        <td><i className="fa fa-times"></i></td>
+        <td><i className="fa fa-times" onClick={this.handleClickDelete}></i></td>
       </tr>
     );
   }
@@ -113,8 +117,13 @@ var MealsTable = React.createClass({
   render: function() {
     var mealRows = [];
     this.props.meals.forEach(function(meal) {
-      mealRows.push(<MealRow id={meal.id} time={meal.time} description={meal.description} calories={meal.calories} />);
-    });
+      mealRows.push(
+        <MealRow id={meal.id}
+                 time={meal.time}
+                 description={meal.description}
+                 calories={meal.calories}
+                 deleteMealId={this.props.deleteMealId} />);
+    }.bind(this));
     return (
       <table className="table">
         <tbody>
@@ -141,7 +150,8 @@ var DaySection = React.createClass({
           <DayTitle date={this.props.date}
                     totalCalories={totalCalories}
                     expectedDailyCalories={this.props.expectedDailyCalories} />
-          <MealsTable meals={this.props.meals} />
+          <MealsTable meals={this.props.meals}
+                      deleteMealId={this.props.deleteMealId} />
 
           <button type="button" className="btn btn-success pull-right"><i className="fa fa-plus"></i> Add</button>
         </div>
@@ -167,7 +177,10 @@ var CalendarSection = React.createClass({
       if(!mealsByDate.hasOwnProperty(date)) {
         continue;
       }
-      daySections.push(<DaySection date={date} meals={mealsByDate[date]} expectedDailyCalories={this.props.expectedDailyCalories} />);
+      daySections.push(<DaySection date={date}
+                                   meals={mealsByDate[date]}
+                                   expectedDailyCalories={this.props.expectedDailyCalories}
+                                   deleteMealId={this.props.deleteMealId} />);
     }
 
     return (
@@ -198,12 +211,7 @@ var CalorieCounterApp = React.createClass({
 
   componentDidMount: function() {
     this.loadUserConfig();
-    this.requestMealsForUser({
-      fromDate: this.state.fromDate,
-      toDate: this.state.toDate,
-      fromTime: this.state.fromTime,
-      toTime: this.state.toTime
-    });
+    this.requestMealsForUser(null);
   },
 
   loadUserConfig() {
@@ -218,6 +226,15 @@ var CalorieCounterApp = React.createClass({
   },
 
   requestMealsForUser: function(config) {
+
+    if(null == config) {
+      config = {
+        fromDate: this.state.fromDate,
+        toDate: this.state.toDate,
+        fromTime: this.state.fromTime,
+        toTime: this.state.toTime
+      };
+    }
 
     var url = '/users/' + this.state.username + '/meals/?';
     url += $.param({
@@ -269,6 +286,18 @@ var CalorieCounterApp = React.createClass({
     this.requestMealsForUser(config);
   },
 
+  deleteMealId: function(mealId) {
+    console.log('Delete meal ID ' + mealId);
+
+    this.callApi({
+        method: 'DELETE',
+        partialUrl: '/users/' + this.state.username + '/meals/' + mealId + '/',
+        success: function(data) {
+          this.requestMealsForUser(null);
+        }.bind(this)
+    });
+  },
+
   callApi: function(settings) {
     settings.url = API + settings.partialUrl;
 
@@ -299,7 +328,8 @@ var CalorieCounterApp = React.createClass({
                      updateExpectedDailyCalories={this.updateExpectedDailyCalories}
                      updateDateTimeFilters={this.updateDateTimeFilters} />
       <CalendarSection meals={this.state.meals}
-                       expectedDailyCalories={this.state.expectedDailyCalories}/>
+                       expectedDailyCalories={this.state.expectedDailyCalories}
+                       deleteMealId={this.deleteMealId} />
     </div>
     );
   }
