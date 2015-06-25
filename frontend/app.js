@@ -25,7 +25,7 @@ var ConfigSection = React.createClass({
             <form className="form-inline">
               <div className="form-group">
                 <label className="sr-only" htmlFor="expectedDailyCalories">From date</label>
-                <input type="number" className="form-control" step={100}
+                <input type="number" className="form-control" step={DEFAULT_STEP}
                        id="expectedDailyCalories"
                        ref="expectedDailyCaloriesInput"
                        value={this.props.expectedDailyCalories}
@@ -101,12 +101,56 @@ var MealRow = React.createClass({
     this.props.deleteMealId(this.props.id);
   },
 
+  handleChange: function() {
+    // Change locally, but don't update server until focus is lost on an
+    // element (blur)
+
+    this.props.updateMealId(this.props.id, this.getMealData(), false);
+  },
+
+  handleBlur: function() {
+    this.props.updateMealId(this.props.id, this.getMealData(), true);
+  },
+
+  getMealData: function() {
+    return {
+      id: this.props.id,
+      date: this.props.date,
+      time: this.refs.mealTimeInput.getDOMNode().value,
+      description: this.refs.mealDescriptionInput.getDOMNode().value,
+      calories: parseInt(this.refs.mealCaloriesInput.getDOMNode().value)
+    };
+  },
+
   render: function() {
     return (
       <tr>
-        <td>{this.props.time}</td>
-        <td>{this.props.description}</td>
-        <td>{this.props.calories}</td>
+        <td>
+          <input className="stealth-input"
+                 type="time"
+                 value={this.props.time}
+                 onChange={this.handleChange}
+                 onBlur={this.handleBlur}
+                 ref='mealTimeInput' />
+        </td>
+        <td>
+          <input className="stealth-input"
+                 type="description"
+                 value={this.props.description}
+                 onChange={this.handleChange}
+                 onBlur={this.handleBlur}
+                 ref='mealDescriptionInput' />
+        </td>
+        <td>
+          <input className="stealth-input"
+                 type="number"
+                 step={DEFAULT_STEP}
+                 value={this.props.calories}
+                 onChange={this.handleChange}
+                 onBlur={this.handleBlur}
+                 ref='mealCaloriesInput' />
+        </td>
+
         <td><i className="fa fa-times" onClick={this.handleClickDelete}></i></td>
       </tr>
     );
@@ -119,10 +163,12 @@ var MealsTable = React.createClass({
     this.props.meals.forEach(function(meal) {
       mealRows.push(
         <MealRow id={meal.id}
+                 date={meal.date}
                  time={meal.time}
                  description={meal.description}
                  calories={meal.calories}
-                 deleteMealId={this.props.deleteMealId} />);
+                 deleteMealId={this.props.deleteMealId}
+                 updateMealId={this.props.updateMealId} />);
     }.bind(this));
     return (
       <table className="table">
@@ -151,7 +197,8 @@ var DaySection = React.createClass({
                     totalCalories={totalCalories}
                     expectedDailyCalories={this.props.expectedDailyCalories} />
           <MealsTable meals={this.props.meals}
-                      deleteMealId={this.props.deleteMealId} />
+                      deleteMealId={this.props.deleteMealId}
+                      updateMealId={this.props.updateMealId} />
         </div>
       </div>
       );
@@ -178,7 +225,8 @@ var CalendarSection = React.createClass({
       daySections.push(<DaySection date={date}
                                    meals={mealsByDate[date]}
                                    expectedDailyCalories={this.props.expectedDailyCalories}
-                                   deleteMealId={this.props.deleteMealId} />);
+                                   deleteMealId={this.props.deleteMealId}
+                                   updateMealId={this.props.updateMealId} />);
     }
 
     return (
@@ -224,8 +272,8 @@ var AddMealSection = React.createClass({
                    ref="newMealDescriptionInput" />
 
             <input type="number" className="form-control"
-                   defaultValue={500}
-                   step={100}
+                   defaultValue={DEFAULT_CALORIES}
+                   step={DEFAULT_STEP}
                    id="newMealCaloriesInput"
                    ref="newMealCaloriesInput" />
 
@@ -356,6 +404,33 @@ var CalorieCounterApp = React.createClass({
     });
   },
 
+  updateMealId: function(mealId, updatedMeal, saveToApi) {
+    console.log('Update meal ID ' + mealId);
+    console.log(updatedMeal);
+
+    var newMeals = [];
+    this.state.meals.forEach(function(meal) {
+      if(mealId == meal.id) {
+        newMeals.push(updatedMeal);
+      } else {
+        newMeals.push(meal);
+      }
+    });
+
+    this.setState({meals: newMeals});
+
+    if(saveToApi) {
+      this.callApi({
+        method: 'PUT',
+        partialUrl: '/users/' + this.state.username + '/meals/' + mealId + '/',
+        data: updatedMeal,
+        success: function(data) {
+          this.requestMealsForUser(null);
+        }.bind(this)
+      });
+    }
+  },
+
   callApi: function(settings) {
     settings.url = API + settings.partialUrl;
 
@@ -387,7 +462,8 @@ var CalorieCounterApp = React.createClass({
                      updateDateTimeFilters={this.updateDateTimeFilters} />
       <CalendarSection meals={this.state.meals}
                        expectedDailyCalories={this.state.expectedDailyCalories}
-                       deleteMealId={this.deleteMealId} />
+                       deleteMealId={this.deleteMealId}
+                       updateMealId={this.updateMealId} />
       <AddMealSection addMeal={this.addMeal} />
     </div>
     );
@@ -397,6 +473,8 @@ var CalorieCounterApp = React.createClass({
 
 var API = 'http://localhost:8000';
 var DATE_FORMAT = 'YYYY-MM-DD';
+var DEFAULT_STEP = 100;
+var DEFAULT_CALORIES = 500;
 
 React.render(
     <CalorieCounterApp />,

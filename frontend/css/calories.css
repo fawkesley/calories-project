@@ -5,3 +5,7 @@
 .highlight-red {
     background-color: rgb(255, 133, 133);
 }
+
+input.stealth-input {
+    border: none;
+}
