@@ -82,7 +82,6 @@ var ConfigSection = React.createClass({
 
 var DayTitle = React.createClass({
   render: function() {
-    console.log('totalCalories ' + this.props.totalCalories + ' expectedDailyCalories ' + this.props.expectedDailyCalories);
     if(this.props.totalCalories <= this.props.expectedDailyCalories) {
       var colourClass = "highlight-green";
     }
@@ -187,8 +186,6 @@ var DaySection = React.createClass({
       totalCalories += meal.calories;
     });
 
-    console.log(totalCalories);
-
     return (
       <div className="row">
 
@@ -213,8 +210,6 @@ var CalendarSection = React.createClass({
       var date = meal['date'];
       (mealsByDate[date] = mealsByDate[date] || []).push(meal);
     }.bind(this));
-
-    console.log(mealsByDate);
 
     var daySections = [];
 
@@ -348,7 +343,6 @@ var CalorieCounterApp = React.createClass({
   },
 
   updateExpectedDailyCalories: function(newExpectedDailyCalories) {
-    console.log('updateExpectedDailyCalories ' + newExpectedDailyCalories);
     this.setState({expectedDailyCalories: newExpectedDailyCalories});
 
     var data = {
@@ -449,7 +443,6 @@ var CalorieCounterApp = React.createClass({
   },
 
   render: function() {
-    console.log('fromDate: ' + this.state.fromDate + ' toDate: ' + this.state.toDate);
 
     return (
     <div>
