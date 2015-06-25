@@ -1,5 +1,36 @@
 "use strict";
 
+var LoginSection = React.createClass({
+  handleSubmitLogin: function(e) {
+    var username = this.refs.usernameInput.getDOMNode().value;
+    var password = this.refs.passwordInput.getDOMNode().value;
+
+    this.props.attemptLogin(username, password);
+    e.preventDefault();
+  },
+
+  render: function() {
+    return (
+      <div className="container">
+        <h1>Please Login</h1>
+        <form className="form-inline" onSubmit={this.handleSubmitLogin} >
+          <div className="form-group">
+            <label className="sr-only" htmlFor="usernameInput">From date</label>
+            <input type="text" className="form-control"
+                   placeholder="Username"  ref="usernameInput" />
+
+            <label className="sr-only" htmlFor="passwordInput">From date</label>
+            <input type="password" className="form-control"
+                   placeholder="Password" ref="passwordInput" />
+            <button type="submit" className="btn btn-success">Login</button>
+          </div>
+        </form>
+      </div>
+    );
+  }
+});
+
+
 var ConfigSection = React.createClass({
 
   handleChangeCalories: function(event) {
@@ -288,8 +319,8 @@ var CalorieCounterApp = React.createClass({
     var thirtyDaysAgo = moment(dateNow).subtract(30, 'days');
 
     return {
-      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0MzUwNjU4MzEsInVzZXJuYW1lIjoiYm9iIiwiZW1haWwiOiIiLCJ1c2VyX2lkIjoyfQ.8NyoDbtR-UqxqUP9M5BFFQlWrbImL37FuAv4nv2uFNw',
-      username: 'bob',
+      token: null,
+      username: null,
       meals: [],
       expectedDailyCalories: 2000,
       fromDate: thirtyDaysAgo.format(DATE_FORMAT),
@@ -299,9 +330,12 @@ var CalorieCounterApp = React.createClass({
     }
   },
 
-  componentDidMount: function() {
-    this.loadUserConfig();
-    this.requestMealsForUser(null);
+  componentDidUpdate: function(prevProps, prevState) {
+    if(null == prevState.token && null != this.state.token) {
+      this.loadUserConfig();
+      this.requestMealsForUser(null);
+    }
+    // TODO: Handle de-authenticate case.
   },
 
   loadUserConfig() {
@@ -338,6 +372,23 @@ var CalorieCounterApp = React.createClass({
         partialUrl: url,
         success: function(data) {
           this.setState({meals: data});
+        }.bind(this)
+    });
+  },
+
+  attemptLogin: function(username, password) {
+
+    this.callApi({
+        method: 'POST',
+        partialUrl: '/api-token-auth/',
+        data: {'username': username, 'password': password},
+        success: function(data) {
+          console.log('Successfully logged in as ' + username);
+          console.log(data);
+          this.setState({
+            username: username,
+            token: data['token']
+          });
         }.bind(this)
     });
   },
@@ -432,17 +483,28 @@ var CalorieCounterApp = React.createClass({
     settings.cache = false;
     settings.error = function(xhr, status, err) {
       console.error(settings.url, status, err.toString());
+      /* TODO: if we receive a 401 or 403, set username & token to null */
     }.bind(this)
 
-   settings.beforeSend = function(xhr) {
-        xhr.setRequestHeader("Authorization", "Bearer " + this.state.token);
-    }.bind(this),
+   if(null != this.state.token) {
+     settings.beforeSend = function(xhr) {
+       xhr.setRequestHeader("Authorization", "Bearer " + this.state.token);
+     }.bind(this)
+   }
 
     console.log(settings);
     $.ajax(settings);
   },
 
   render: function() {
+
+    if(null == this.state.token) {
+      return (
+        <div>
+          <LoginSection attemptLogin={this.attemptLogin}/>
+        </div>
+      )
+    }
 
     return (
     <div>
