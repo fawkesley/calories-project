@@ -1,28 +1,50 @@
 "use strict";
 
 var LoginSection = React.createClass({
-  handleSubmitLogin: function(e) {
+  handleLogin: function(e) {
     var username = this.refs.usernameInput.getDOMNode().value;
     var password = this.refs.passwordInput.getDOMNode().value;
 
     this.props.attemptLogin(username, password);
+  },
+
+  handleCreateUser: function(e) {
+    var username = this.refs.usernameInput.getDOMNode().value;
+    var password = this.refs.passwordInput.getDOMNode().value;
+
+    this.props.attemptCreateUser(username, password);
+  },
+
+  suppressSubmit: function(e) {
     e.preventDefault();
   },
 
   render: function() {
     return (
       <div className="container">
-        <h1>Please Login</h1>
-        <form className="form-inline" onSubmit={this.handleSubmitLogin} >
+        <h1>Log in or Sign Up</h1>
+        <form className="form-horizontal" onSubmit={this.suppressSubmit}>
           <div className="form-group">
-            <label className="sr-only" htmlFor="usernameInput">From date</label>
-            <input type="text" className="form-control"
-                   placeholder="Username"  ref="usernameInput" />
-
-            <label className="sr-only" htmlFor="passwordInput">From date</label>
-            <input type="password" className="form-control"
-                   placeholder="Password" ref="passwordInput" />
-            <button type="submit" className="btn btn-success">Login</button>
+            <label htmlFor="usernameInput" className="col-sm-2 control-label">Username</label>
+            <div className="col-sm-10">
+              <input type="text" className="form-control" id="usernameInput"
+                     ref="usernameInput"  placeholder="Username" />
+            </div>
+          </div>
+          <div className="form-group">
+            <label htmlFor="passwordInput" className="col-sm-2 control-label">Password</label>
+            <div className="col-sm-10">
+              <input type="password" className="form-control" id="passwordInput"
+                     ref="passwordInput"  placeholder="Password" />
+            </div>
+          </div>
+          <div className="form-group">
+            <div className="col-sm-offset-2 col-sm-10">
+              <button onClick={this.handleLogin}
+                      className="btn btn-default">Sign in</button>
+              <button onClick={this.handleCreateUser}
+                      className="btn btn-default">Create Account</button>
+            </div>
           </div>
         </form>
       </div>
@@ -376,6 +398,19 @@ var CalorieCounterApp = React.createClass({
     });
   },
 
+  attemptCreateUser: function(username, password) {
+
+    this.callApi({
+        method: 'POST',
+        partialUrl: '/users/',
+        data: {'username': username, 'password': password},
+        success: function(data) {
+          console.log('Successfully created user ' + username);
+          this.attemptLogin(username, password)
+        }.bind(this)
+    });
+  },
+
   attemptLogin: function(username, password) {
 
     this.callApi({
@@ -501,7 +536,8 @@ var CalorieCounterApp = React.createClass({
     if(null == this.state.token) {
       return (
         <div>
-          <LoginSection attemptLogin={this.attemptLogin}/>
+          <LoginSection attemptLogin={this.attemptLogin}
+                        attemptCreateUser={this.attemptCreateUser} />
         </div>
       )
     }

@@ -53,7 +53,7 @@ export API_TOKEN=...
 ### Create a User
 
 ```
-curl -X POST http://localhost:8000/users/ -d '{"username": "test_001"}' -H 'Content-Type: application/json' -H "Authorization: Bearer ${API_TOKEN}"
+curl -X POST http://localhost:8000/users/ -d '{"username": "test_001", "password": "password_001"}' -H 'Content-Type: application/json' -H "Authorization: Bearer ${API_TOKEN}"
 ```
 
 ### Retrieve a User
