@@ -1,5 +1,35 @@
 "use strict";
 
+var LoginAlertSection = React.createClass({
+  handleClick: function() {
+    this.props.clearLoginAlert();
+  },
+
+  render: function() {
+    if(null != this.props.loginAlert) {
+
+      if(null != this.props.loginAlert.json) {
+        var preSection = (<pre>{this.props.loginAlert.json}</pre>);
+      } else {
+        var preSection = (<div />);
+      }
+
+      return (
+        <div className="alert alert-danger" role="alert"
+             onClick={this.handleClick} >
+          <i className="fa fa-times pull-right"></i>
+          <h4><b>{this.props.loginAlert.text}</b></h4>
+
+          {preSection}
+        </div>
+      );
+    }
+    else {
+      return (<div />);
+    }
+  }
+});
+
 var LoginSection = React.createClass({
   handleLogin: function(e) {
     var username = this.refs.usernameInput.getDOMNode().value;
@@ -24,8 +54,11 @@ var LoginSection = React.createClass({
       <div className="container">
 
         <Navbar />
+        <LoginAlertSection loginAlert={this.props.loginAlert}
+                           clearLoginAlert={this.props.clearLoginAlert} />
 
         <h1>Log in or Sign Up</h1>
+
         <form className="form-horizontal" onSubmit={this.suppressSubmit}>
           <div className="form-group">
             <label htmlFor="usernameInput" className="col-sm-2 control-label">Username</label>
@@ -394,6 +427,7 @@ var CalorieCounterApp = React.createClass({
     return {
       token: null,
       username: null,
+      loginAlert: null,
       meals: [],
       expectedDailyCalories: 2000,
       fromDate: thirtyDaysAgo.format(DATE_FORMAT),
@@ -458,16 +492,19 @@ var CalorieCounterApp = React.createClass({
         success: function(data) {
           console.log('Successfully created user ' + username);
           this.attemptLogin(username, password)
-        }.bind(this)
+        }.bind(this),
+        error: this.customErrorHandler
     });
   },
 
   attemptLogin: function(username, password) {
 
+    this.setState({loginAlert: null});
     this.callApi({
         method: 'POST',
         partialUrl: '/api-token-auth/',
         data: {'username': username, 'password': password},
+
         success: function(data) {
           console.log('Successfully logged in as ' + username);
           console.log(data);
@@ -475,7 +512,22 @@ var CalorieCounterApp = React.createClass({
             username: username,
             token: data['token']
           });
-        }.bind(this)
+        }.bind(this),
+        error: this.customErrorHandler
+    });
+  },
+
+  customErrorHandler: function(xhr, status, err) {
+    console.log(xhr);
+    var errorText = 'Error, received ' + err.toString() + ' (HTTP ' + xhr.status + ')';
+    try {
+      var errorJSON = JSON.stringify(xhr.responseJSON, null, 2)
+    } catch(error) {
+      var errorJSON = null;
+    }
+
+    this.setState({
+      loginAlert: {'text': errorText, json: errorJSON}
     });
   },
 
@@ -566,15 +618,22 @@ var CalorieCounterApp = React.createClass({
     }
   },
 
+  clearLoginAlert: function() {
+    this.setState({loginAlert: null});
+  },
+
   callApi: function(settings) {
     settings.url = API + settings.partialUrl;
 
     settings.dataType = 'json',
     settings.cache = false;
-    settings.error = function(xhr, status, err) {
-      console.error(settings.url, status, err.toString());
-      /* TODO: if we receive a 401 or 403, set username & token to null */
-    }.bind(this)
+
+    if(!settings.hasOwnProperty('error')) {
+      settings.error = function(xhr, status, err) {
+        console.error(settings.url, status, err.toString());
+        /* TODO: if we receive a 401 or 403, set username & token to null */
+      }.bind(this)
+    }
 
    if(null != this.state.token) {
      settings.beforeSend = function(xhr) {
@@ -592,7 +651,9 @@ var CalorieCounterApp = React.createClass({
       return (
         <div>
           <LoginSection attemptLogin={this.attemptLogin}
-                        attemptCreateUser={this.attemptCreateUser} />
+                        attemptCreateUser={this.attemptCreateUser}
+                        loginAlert={this.state.loginAlert}
+                        clearLoginAlert={this.clearLoginAlert}/>
         </div>
       )
     }
