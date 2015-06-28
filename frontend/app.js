@@ -1,5 +1,26 @@
 "use strict";
 
+var LoginAlertSection = React.createClass({
+  handleClick: function() {
+    this.props.clearLoginAlert();
+  },
+
+  render: function() {
+    if(null != this.props.loginAlertText) {
+      return (
+        <div className="alert alert-danger" role="alert"
+             onClick={this.handleClick} ><b>
+          {this.props.loginAlertText}
+          <i className="fa fa-times pull-right"></i>
+        </b></div>
+      );
+    }
+    else {
+      return (<div />);
+    }
+  }
+});
+
 var LoginSection = React.createClass({
   handleLogin: function(e) {
     var username = this.refs.usernameInput.getDOMNode().value;
@@ -24,8 +45,11 @@ var LoginSection = React.createClass({
       <div className="container">
 
         <Navbar />
+        <LoginAlertSection loginAlertText={this.props.loginAlertText}
+                           clearLoginAlert={this.props.clearLoginAlert} />
 
         <h1>Log in or Sign Up</h1>
+
         <form className="form-horizontal" onSubmit={this.suppressSubmit}>
           <div className="form-group">
             <label htmlFor="usernameInput" className="col-sm-2 control-label">Username</label>
@@ -394,6 +418,7 @@ var CalorieCounterApp = React.createClass({
     return {
       token: null,
       username: null,
+      loginAlertText: null,
       meals: [],
       expectedDailyCalories: 2000,
       fromDate: thirtyDaysAgo.format(DATE_FORMAT),
@@ -566,6 +591,10 @@ var CalorieCounterApp = React.createClass({
     }
   },
 
+  clearLoginAlert: function() {
+    this.setState({loginAlertText: null});
+  },
+
   callApi: function(settings) {
     settings.url = API + settings.partialUrl;
 
@@ -592,7 +621,9 @@ var CalorieCounterApp = React.createClass({
       return (
         <div>
           <LoginSection attemptLogin={this.attemptLogin}
-                        attemptCreateUser={this.attemptCreateUser} />
+                        attemptCreateUser={this.attemptCreateUser}
+                        loginAlertText={this.state.loginAlertText}
+                        clearLoginAlert={this.clearLoginAlert}/>
         </div>
       )
     }
