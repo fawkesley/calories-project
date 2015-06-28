@@ -22,6 +22,9 @@ var LoginSection = React.createClass({
   render: function() {
     return (
       <div className="container">
+
+        <Navbar />
+
         <h1>Log in or Sign Up</h1>
         <form className="form-horizontal" onSubmit={this.suppressSubmit}>
           <div className="form-group">
@@ -72,6 +75,8 @@ var ConfigSection = React.createClass({
 
     return (
       <div className="container">
+        <Navbar username={this.props.username} logout={this.props.logout}/>
+
         <div className="row">
           <div className="col-md-12">
             <h2>Expected daily calories</h2>
@@ -132,6 +137,51 @@ var ConfigSection = React.createClass({
       );
   }
 });
+
+var Navbar = React.createClass({
+  handleClickLogout: function() {
+    this.props.logout();
+  },
+
+
+  render: function() {
+    if(null != this.props.username) {
+      var userText = (
+        <a onClick={this.handleClickLogout}>
+          Hello, {this.props.username} (logout)
+        </a>
+      );
+    } else {
+      var userText = (<span />);
+    }
+
+    return (
+
+      <nav className="navbar navbar-default">
+        <div className="container-fluid">
+          <div className="navbar-header">
+            <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span className="sr-only">Toggle navigation</span>
+              <span className="icon-bar"></span>
+              <span className="icon-bar"></span>
+              <span className="icon-bar"></span>
+            </button>
+            <span className="navbar-brand">Calorie Counter</span>
+          </div>
+          <div id="navbar" className="navbar-collapse collapse">
+            <ul className="nav navbar-nav">
+              <li><a href="mailto:paul@paulfurley.com">Contact</a></li>
+            </ul>
+            <ul className="nav navbar-nav navbar-right">
+              <li>{userText}</li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    );
+  }
+});
+
 
 var DayTitle = React.createClass({
   render: function() {
@@ -428,6 +478,10 @@ var CalorieCounterApp = React.createClass({
     });
   },
 
+  logout: function() {
+    this.setState({username: null, token: null});
+  },
+
   updateExpectedDailyCalories: function(newExpectedDailyCalories) {
     this.setState({expectedDailyCalories: newExpectedDailyCalories});
 
@@ -550,7 +604,9 @@ var CalorieCounterApp = React.createClass({
                      fromTime={this.state.fromTime}
                      toTime={this.state.toTime}
                      updateExpectedDailyCalories={this.updateExpectedDailyCalories}
-                     updateDateTimeFilters={this.updateDateTimeFilters} />
+                     updateDateTimeFilters={this.updateDateTimeFilters}
+                     username={this.state.username}
+                     logout={this.logout} />
       <CalendarSection meals={this.state.meals}
                        expectedDailyCalories={this.state.expectedDailyCalories}
                        deleteMealId={this.deleteMealId}
