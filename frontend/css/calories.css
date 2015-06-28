@@ -1,0 +1,11 @@
+.highlight-green {
+    background-color: rgb(102, 255, 102);
+}
+
+.highlight-red {
+    background-color: rgb(255, 133, 133);
+}
+
+input.stealth-input {
+    border: none;
+}
