@@ -1,6 +1,6 @@
 import json
 
-from nose.tools import assert_equal
+from nose.tools import assert_equal, assert_true
 
 from rest_framework.test import APITestCase
 from django.contrib.auth.models import User
@@ -53,6 +53,19 @@ class TestCreateUserAccount(APITestCase):
         self._create_user('test_004')
         user = User.objects.get(username='test_004')
         assert_equal(False, user.is_superuser)
+
+    def test_new_user_passwords_can_login(self):
+        data = json.dumps({"username": "test_005", "password": "password_005"})
+
+        response = self.client.post(
+            '/users/',
+            data=data,
+            content_type='application/json')
+        html_status, _ = (response.status_code, decode(response))
+        assert_equal(201, html_status)
+
+        assert_true(self.client.login(
+            username='test_005', password='password_005'))
 
 
 class TestRetrieveUserAccount(APITestCase):

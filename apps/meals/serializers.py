@@ -17,7 +17,12 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'expected_daily_calories')
+        fields = ('username', 'expected_daily_calories', 'password')
+        extra_kwargs = {'password': {'required': False, 'write_only': True}}
+
+    def create(self, validated_data):
+        # The `create_user` helper handles hashing passwords.
+        return User.objects.create_user(**validated_data)
 
     def update(self, instance, validated_data):
         """
