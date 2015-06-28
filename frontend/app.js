@@ -170,6 +170,7 @@ var Navbar = React.createClass({
           </div>
           <div id="navbar" className="navbar-collapse collapse">
             <ul className="nav navbar-nav">
+              <li><a href="about.html">About</a></li>
               <li><a href="mailto:paul@paulfurley.com">Contact</a></li>
             </ul>
             <ul className="nav navbar-nav navbar-right">
