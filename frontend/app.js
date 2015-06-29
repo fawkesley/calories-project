@@ -501,7 +501,7 @@ var CalorieCounterApp = React.createClass({
         partialUrl: '/users/',
         data: {'username': username, 'password': password},
         success: function(data) {
-          console.log('Successfully created user ' + username);
+          console.info('Successfully created user ' + username);
           this.attemptLogin(username, password)
         }.bind(this),
         error: this.customErrorHandler
@@ -517,8 +517,8 @@ var CalorieCounterApp = React.createClass({
         data: {'username': username, 'password': password},
 
         success: function(data) {
-          console.log('Successfully logged in as ' + username);
-          console.log(data);
+          console.info('Successfully logged in as ' + username);
+          console.debug('User data: ', data);
           this.setState({
             username: username,
             token: data['token']
@@ -529,7 +529,11 @@ var CalorieCounterApp = React.createClass({
   },
 
   customErrorHandler: function(xhr, status, err) {
-    console.log(xhr);
+    /* This error handler formats and displays the JSON error in an alert on
+     * the UI
+     * */
+    console.error('API error: ', xhr, status, err.toString());
+
     var errorText = 'Error, received ' + err.toString() + ' (HTTP ' + xhr.status + ')';
     try {
       var errorJSON = JSON.stringify(xhr.responseJSON, null, 2)
@@ -559,14 +563,14 @@ var CalorieCounterApp = React.createClass({
         partialUrl: '/users/' + this.state.username + '/',
         data: data,
         success: function(data) {
-          console.log('Successfully updated user expected_daily_calories');
+          console.debug('Successfully updated user expected_daily_calories');
           this.setState({expectedDailyCalories: data['expected_daily_calories']});
         }.bind(this)
     });
   },
 
   updateDateTimeFilters: function(config) {
-    console.log('updateDateTimeFilters ' + config.fromDate + ' '
+    console.debug('updateDateTimeFilters ' + config.fromDate + ' '
                 + config.toDate + ' ' + config.fromTime + ' ' + config.toTime);
 
     this.setState({
@@ -591,7 +595,7 @@ var CalorieCounterApp = React.createClass({
   },
 
   deleteMealId: function(mealId) {
-    console.log('Delete meal ID ' + mealId);
+    console.debug('Delete meal ID ' + mealId);
 
     this.callApi({
         method: 'DELETE',
@@ -603,8 +607,7 @@ var CalorieCounterApp = React.createClass({
   },
 
   updateMealId: function(mealId, updatedMeal, saveToApi) {
-    console.log('Update meal ID ' + mealId);
-    console.log(updatedMeal);
+    console.debug('Update meal ID ', mealId, ' ', updatedMeal);
 
     var newMeals = [];
     this.state.meals.forEach(function(meal) {
@@ -643,7 +646,7 @@ var CalorieCounterApp = React.createClass({
       settings.error = function(xhr, status, err) {
         console.error(settings.url, status, err.toString());
         if(401 == xhr.status) {
-          console.log('Got HTTP 401, resetting auth token');
+          console.warn('Got HTTP 401, resetting auth token');
           this.logout();
         }
       }.bind(this)
@@ -655,7 +658,7 @@ var CalorieCounterApp = React.createClass({
      }.bind(this)
    }
 
-    console.log(settings);
+    console.debug('AJAX: ', settings);
     $.ajax(settings);
   },
 
