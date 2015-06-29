@@ -104,6 +104,10 @@ var ConfigSection = React.createClass({
     });
   },
 
+  suppressSubmit: function(e) {
+    e.preventDefault();
+  },
+
   render: function() {
 
     return (
@@ -113,7 +117,7 @@ var ConfigSection = React.createClass({
         <div className="row">
           <div className="col-md-12">
             <h2>Expected daily calories</h2>
-            <form className="form-inline">
+            <form className="form-inline" onSubmit={this.suppressSubmit}>
               <div className="form-group">
                 <label className="sr-only" htmlFor="expectedDailyCalories">From date</label>
                 <input type="number" className="form-control" step={DEFAULT_STEP}
