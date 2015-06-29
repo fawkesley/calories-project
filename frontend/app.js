@@ -409,6 +409,7 @@ var AddMealSection = React.createClass({
 
             <input type="text" className="form-control"
                    placeholder="Enter description..."
+                   defaultValue="A tasty meal"
                    id="newMealDescriptionInput"
                    ref="newMealDescriptionInput" />
 
