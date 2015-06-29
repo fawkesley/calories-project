@@ -454,7 +454,6 @@ var CalorieCounterApp = React.createClass({
       this.loadUserConfig();
       this.requestMealsForUser(null);
     }
-    // TODO: Handle de-authenticate case.
   },
 
   loadUserConfig() {
@@ -643,7 +642,10 @@ var CalorieCounterApp = React.createClass({
     if(!settings.hasOwnProperty('error')) {
       settings.error = function(xhr, status, err) {
         console.error(settings.url, status, err.toString());
-        /* TODO: if we receive a 401 or 403, set username & token to null */
+        if(401 == xhr.status) {
+          console.log('Got HTTP 401, resetting auth token');
+          this.logout();
+        }
       }.bind(this)
     }
 
