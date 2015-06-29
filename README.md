@@ -64,10 +64,13 @@ Now you can access the frontend by visiting http://localhost:4000
 
 ## Play with the API
 
-## Optional: Create a superuser
+### Optional: Create a superuser
 
-A "superuser" can add, edit and delete other users' meals.
+There are two roles in the backend: normal users and "superusers". Superusers
+are able to add, edit and delete other users' meals as well as users
+themselves.
 
+Normal users can only access their own meals.
 
 ```
 ./manage.py createsuperuser --username admin --email admin@admin.com
