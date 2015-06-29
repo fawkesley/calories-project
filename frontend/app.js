@@ -121,9 +121,9 @@ var ConfigSection = React.createClass({
               <div className="form-group">
                 <label className="sr-only" htmlFor="expectedDailyCalories">From date</label>
                 <input type="number" className="form-control"
-                       step={CALORIES_INCREMENT}
-                       min={CALORIES_MINIMUM}
-                       max={CALORIES_MAXIMUM}
+                       step={CalorieCounter.CALORIES_INCREMENT}
+                       min={CalorieCounter.CALORIES_MINIMUM}
+                       max={CalorieCounter.CALORIES_MAXIMUM}
                        id="expectedDailyCalories"
                        ref="expectedDailyCaloriesInput"
                        value={this.props.expectedDailyCalories}
@@ -287,9 +287,9 @@ var MealRow = React.createClass({
         <td>
           <input className="stealth-input"
                  type="number"
-                 step={CALORIES_INCREMENT}
-                 min={CALORIES_MINIMUM}
-                 max={CALORIES_MAXIMUM}
+                 step={CalorieCounter.CALORIES_INCREMENT}
+                 min={CalorieCounter.CALORIES_MINIMUM}
+                 max={CalorieCounter.CALORIES_MAXIMUM}
                  value={this.props.calories}
                  onChange={this.handleChange}
                  onBlur={this.handleBlur}
@@ -398,7 +398,7 @@ var AddMealSection = React.createClass({
           <div className="form-group">
             <label className="sr-only" htmlFor="expectedDailyCalories">From date</label>
             <input type="date" className="form-control"
-                   defaultValue={moment().format(DATE_FORMAT)}
+                   defaultValue={moment().format(CalorieCounter.DATE_FORMAT)}
                    id="newMealDateInput"
                    ref="newMealDateInput" />
 
@@ -413,10 +413,10 @@ var AddMealSection = React.createClass({
                    ref="newMealDescriptionInput" />
 
             <input type="number" className="form-control"
-                   defaultValue={DEFAULT_CALORIES}
-                   step={CALORIES_INCREMENT}
-                   min={CALORIES_MIMIMUM}
-                   max={CALORIES_MAXIMUM}
+                   defaultValue={CalorieCounter.DEFAULT_CALORIES}
+                   step={CalorieCounter.CALORIES_INCREMENT}
+                   min={CalorieCounter.CALORIES_MINIMUM}
+                   max={CalorieCounter.CALORIES_MAXIMUM}
                    id="newMealCaloriesInput"
                    ref="newMealCaloriesInput" />
 
@@ -441,8 +441,8 @@ var CalorieCounterApp = React.createClass({
       loginAlert: null,
       meals: [],
       expectedDailyCalories: 2000,
-      fromDate: thirtyDaysAgo.format(DATE_FORMAT),
-      toDate: dateNow.format(DATE_FORMAT),
+      fromDate: thirtyDaysAgo.format(CalorieCounter.DATE_FORMAT),
+      toDate: dateNow.format(CalorieCounter.DATE_FORMAT),
       fromTime: '00:00',
       toTime: '23:59'
     }
@@ -634,7 +634,7 @@ var CalorieCounterApp = React.createClass({
   },
 
   callApi: function(settings) {
-    settings.url = API + settings.partialUrl;
+    settings.url = CalorieCounter.API + settings.partialUrl;
 
     settings.dataType = 'json',
     settings.cache = false;
@@ -690,13 +690,14 @@ var CalorieCounterApp = React.createClass({
   }
 });
 
-
-var API = 'http://localhost:8000';
-var DATE_FORMAT = 'YYYY-MM-DD';
-var DEFAULT_CALORIES = 500;
-var CALORIES_MINIMUM = 100;
-var CALORIES_MAXIMUM = 10000;
-var CALORIES_INCREMENT = 100;
+var CalorieCounter = {
+  API: 'http://localhost:8000',
+  DATE_FORMAT: 'YYYY-MM-DD',
+  DEFAULT_CALORIES: 500,
+  CALORIES_MINIMUM: 100,
+  CALORIES_MAXIMUM: 10000,
+  CALORIES_INCREMENT: 100
+};
 
 React.render(
     <CalorieCounterApp />,
