@@ -117,14 +117,16 @@ curl -X PUT http://localhost:8000/users/test_001/ -d '{"username": "test_001", "
 curl -X DELETE http://localhost:8000/users/test_001/ -H 'Content-Type: application/json' -H "Authorization: Bearer ${API_TOKEN}"
 ```
 
-## Requirements
-
-### DONE
+## Original Requirements
 
 - User must be able to create an account and log in
 - When logged in, user can see a list of his meals and calories (user enters
   calories manually, no auto calculations!), also he should be able to edit and
   delete
+- Implement at least two roles with different permission levels (ie: a regular
+  user would only be able to CRUD on his owned records, a user manager would be
+  able to CRUD users, an admin would be able to CRUD on all records and users,
+  etc.)
 - Each entry has a date, time, text, and num of calories
 - Filter by dates from-to, time from-to (e.g. how much calories have I had for
   lunch each day in the last month, if lunch is between 12 and 15h)
@@ -145,10 +147,3 @@ curl -X DELETE http://localhost:8000/users/test_001/ -H 'Content-Type: applicati
   used to evaluate your skills. The project will be evaluated as if you are
   delivering it to a customer. We expect you to make sure that the app is fully
   functional and doesn’t have any obvious missing pieces.
-
-### TODO
-
-- Implement at least two roles with different permission levels (ie: a regular
-  user would only be able to CRUD on his owned records, a user manager would be
-  able to CRUD users, an admin would be able to CRUD on all records and users,
-  etc.)
