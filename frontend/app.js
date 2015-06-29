@@ -418,7 +418,7 @@ var CalorieCounterApp = React.createClass({
     return {
       token: null,
       username: null,
-      loginAlertText: null,
+      loginAlertText: "Alert!",
       meals: [],
       expectedDailyCalories: 2000,
       fromDate: thirtyDaysAgo.format(DATE_FORMAT),
@@ -493,6 +493,7 @@ var CalorieCounterApp = React.createClass({
         method: 'POST',
         partialUrl: '/api-token-auth/',
         data: {'username': username, 'password': password},
+
         success: function(data) {
           console.log('Successfully logged in as ' + username);
           console.log(data);
@@ -500,7 +501,13 @@ var CalorieCounterApp = React.createClass({
             username: username,
             token: data['token']
           });
-        }.bind(this)
+        }.bind(this),
+
+        error: function(xhr, status, err) {
+          this.setState({
+            loginAlertText: 'Failed to login: ' + err.toString()
+          });
+       }.bind(this)
     });
   },
 
@@ -600,10 +607,13 @@ var CalorieCounterApp = React.createClass({
 
     settings.dataType = 'json',
     settings.cache = false;
-    settings.error = function(xhr, status, err) {
-      console.error(settings.url, status, err.toString());
-      /* TODO: if we receive a 401 or 403, set username & token to null */
-    }.bind(this)
+
+    if(!settings.hasOwnProperty('error')) {
+      settings.error = function(xhr, status, err) {
+        console.error(settings.url, status, err.toString());
+        /* TODO: if we receive a 401 or 403, set username & token to null */
+      }.bind(this)
+    }
 
    if(null != this.state.token) {
      settings.beforeSend = function(xhr) {
