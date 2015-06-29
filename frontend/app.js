@@ -64,7 +64,7 @@ var LoginSection = React.createClass({
             <label htmlFor="usernameInput" className="col-sm-2 control-label">Username</label>
             <div className="col-sm-10">
               <input type="text" className="form-control" id="usernameInput"
-                     ref="usernameInput"  placeholder="Username" />
+                     ref="usernameInput"  placeholder="Username" autoFocus={true} />
             </div>
           </div>
           <div className="form-group">
