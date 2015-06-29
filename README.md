@@ -1,6 +1,13 @@
-## Run Backend
+# Calorie Counter Demo Application
 
-Backend is written in Python / Django.
+This is a project demonstrating a simple static React JS frontend communicating
+with a RESTful API built with Django Rest Framework.
+
+## Run the backend (API)
+
+The backend is written in Django 1.8.
+
+### Install
 
 ```
 virtualenv venv
@@ -9,35 +16,71 @@ pip install -r requirements.txt
 pip install -r requirements_for_tests.txt
 ```
 
-## Test
+### Run API tests
 
 ```
 make test
 ```
 
-## Play with the API
+The API tests live in the `apps/meals/tests/` directory.
 
 ### Migrate your database
+
+For simplicity we use a sqlite3 database called `db.sqlite3`. First you'll want
+to create an empty database:
 
 ```
 make migrate_database
 ```
 
+### Run the development webserver
 
-### Load demo fixtures
+By default the frontend expects to find the API running at `127.0.0.1:8000`
 
 ```
-make load_fixtures
+./manage.py runserver 0.0.0.0:8000
 ```
 
-### First, make a superuser (admin)
+## Run the frontend
+
+The frontend is an HTML5 static site and lives in the `frontend/` directory.
+
+You can serve this with Python's builtin webserver:
+
+```
+cd frontend
+python2 -m SimpleHTTPServer 4000
+```
+
+Or on Python 3:
+
+```
+cd frontend
+python3 -m http.server 4000
+```
+
+Now you can access the frontend by visiting http://localhost:4000
+
+
+## Play with the API
+
+## Optional: Create a superuser
+
+A "superuser" can add, edit and delete other users' meals.
+
 
 ```
 ./manage.py createsuperuser --username admin --email admin@admin.com
 ```
 
-The following examples assume you set the password to "admin"...
+### Optional: Load demo fixtures
 
+For convenience, you can load some example data which will make a user `bob`
+with password `bobspassword`.
+
+```
+make load_fixtures
+```
 ### Get an API token
 
 ```
@@ -76,14 +119,12 @@ curl -X DELETE http://localhost:8000/users/test_001/ -H 'Content-Type: applicati
 
 ## Requirements
 
+### DONE
+
 - User must be able to create an account and log in
 - When logged in, user can see a list of his meals and calories (user enters
   calories manually, no auto calculations!), also he should be able to edit and
   delete
-- Implement at least two roles with different permission levels (ie: a regular
-  user would only be able to CRUD on his owned records, a user manager would be
-  able to CRUD users, an admin would be able to CRUD on all records and users,
-  etc.)
 - Each entry has a date, time, text, and num of calories
 - Filter by dates from-to, time from-to (e.g. how much calories have I had for
   lunch each day in the last month, if lunch is between 12 and 15h)
@@ -104,3 +145,10 @@ curl -X DELETE http://localhost:8000/users/test_001/ -H 'Content-Type: applicati
   used to evaluate your skills. The project will be evaluated as if you are
   delivering it to a customer. We expect you to make sure that the app is fully
   functional and doesn’t have any obvious missing pieces.
+
+### TODO
+
+- Implement at least two roles with different permission levels (ie: a regular
+  user would only be able to CRUD on his owned records, a user manager would be
+  able to CRUD users, an admin would be able to CRUD on all records and users,
+  etc.)
