@@ -104,6 +104,10 @@ var ConfigSection = React.createClass({
     });
   },
 
+  suppressSubmit: function(e) {
+    e.preventDefault();
+  },
+
   render: function() {
 
     return (
@@ -113,10 +117,13 @@ var ConfigSection = React.createClass({
         <div className="row">
           <div className="col-md-12">
             <h2>Expected daily calories</h2>
-            <form className="form-inline">
+            <form className="form-inline" onSubmit={this.suppressSubmit}>
               <div className="form-group">
                 <label className="sr-only" htmlFor="expectedDailyCalories">From date</label>
-                <input type="number" className="form-control" step={DEFAULT_STEP}
+                <input type="number" className="form-control"
+                       step={CALORIES_INCREMENT}
+                       min={CALORIES_MINIMUM}
+                       max={CALORIES_MAXIMUM}
                        id="expectedDailyCalories"
                        ref="expectedDailyCaloriesInput"
                        value={this.props.expectedDailyCalories}
@@ -280,7 +287,9 @@ var MealRow = React.createClass({
         <td>
           <input className="stealth-input"
                  type="number"
-                 step={DEFAULT_STEP}
+                 step={CALORIES_INCREMENT}
+                 min={CALORIES_MINIMUM}
+                 max={CALORIES_MAXIMUM}
                  value={this.props.calories}
                  onChange={this.handleChange}
                  onBlur={this.handleBlur}
@@ -405,7 +414,9 @@ var AddMealSection = React.createClass({
 
             <input type="number" className="form-control"
                    defaultValue={DEFAULT_CALORIES}
-                   step={DEFAULT_STEP}
+                   step={CALORIES_INCREMENT}
+                   min={CALORIES_MIMIMUM}
+                   max={CALORIES_MAXIMUM}
                    id="newMealCaloriesInput"
                    ref="newMealCaloriesInput" />
 
@@ -682,8 +693,10 @@ var CalorieCounterApp = React.createClass({
 
 var API = 'http://localhost:8000';
 var DATE_FORMAT = 'YYYY-MM-DD';
-var DEFAULT_STEP = 100;
 var DEFAULT_CALORIES = 500;
+var CALORIES_MINIMUM = 100;
+var CALORIES_MAXIMUM = 10000;
+var CALORIES_INCREMENT = 100;
 
 React.render(
     <CalorieCounterApp />,
