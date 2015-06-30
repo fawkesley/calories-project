@@ -41,6 +41,9 @@ By default the frontend expects to find the API running at `127.0.0.1:8000`
 ./manage.py runserver 0.0.0.0:8000
 ```
 
+For convenience, you can now visit the API in your web browser at
+[http://localhost:8000](http://localhost:8000)
+
 ## Run the frontend
 
 The frontend is an HTML5 static site and lives in the `frontend/` directory.
@@ -59,12 +62,25 @@ cd frontend
 python3 -m http.server 4000
 ```
 
-Now you can access the frontend by visiting http://localhost:4000
+Now you can access the frontend by visiting [http://localhost:4000](http://localhost:4000)
 
 
 ## Play with the API
 
-### Optional: Create a superuser
+### Optional: Load demo fixtures
+
+For convenience, you can load some example data which will make the following
+users:
+
+- `alice` with password `alice`
+- `bob` with password `bob`
+- `admin` with password `admin` (superuser)
+
+And some meals belonging to `bob`.
+
+```
+make load_fixtures
+```
 
 There are two roles in the backend: normal users and "superusers". Superusers
 are able to add, edit and delete other users' meals as well as users
@@ -72,22 +88,10 @@ themselves.
 
 Normal users can only access their own meals.
 
-```
-./manage.py createsuperuser --username admin --email admin@admin.com
-```
-
-### Optional: Load demo fixtures
-
-For convenience, you can load some example data which will make a user `bob`
-with password `bobspassword`.
-
-```
-make load_fixtures
-```
 ### Get an API token
 
 ```
-curl -X POST http://localhost:8000/api-token-auth/ -d '{"username": "bob", "password": "bobspassword"}' -H 'Content-Type: application/json'
+curl -X POST http://localhost:8000/api-token-auth/ -d '{"username": "alice", "password": "alice"}' -H 'Content-Type: application/json'
 ```
 
 For convenience, you can store this in your environment:
