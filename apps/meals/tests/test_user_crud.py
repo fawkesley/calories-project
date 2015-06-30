@@ -68,6 +68,47 @@ class TestCreateUserAccount(APITestCase):
             username='test_005', password='password_005'))
 
 
+class TestListUsers(APITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.normal_1 = User.objects.create_user(username='normal_1')
+        cls.superuser_1 = User.objects.create_user(username='superuser_1')
+        cls.superuser_1.is_superuser = True
+        cls.superuser_1.save()
+
+    def _get_users(self):
+        response = self.client.get('/users/', content_type='application/json')
+        return (response.status_code, decode(response))
+
+    def test_unauthenticated_requests_fail(self):
+        http_status, response_json = self._get_users()
+        assert_equal(401, http_status)
+        assert_equal(
+            {'detail': 'Authentication credentials were not provided.'},
+            response_json)
+
+    def test_normal_users_cannot_list_users(self):
+        self.client.force_authenticate(self.normal_1)
+        http_status, response_json = self._get_users()
+        assert_equal(403, http_status)
+
+    def test_superusers_can_list_users(self):
+        self.client.force_authenticate(self.superuser_1)
+        http_status, response_json = self._get_users()
+        assert_equal(200, http_status)
+        assert_equal([
+            {
+                "username": "normal_1",
+                "expected_daily_calories": 2000,
+            },
+            {
+                "username": "superuser_1",
+                "expected_daily_calories": 2000,
+            }
+        ],
+            response_json)
+
+
 class TestRetrieveUserAccount(APITestCase):
     @classmethod
     def setUpTestData(cls):
