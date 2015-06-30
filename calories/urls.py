@@ -14,16 +14,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf.urls import url, include
+from .api_root import ApiRoot
 
-
-# from django.contrib import admin  # TODO
 
 urlpatterns = [
-    # url(r'^admin/', include(admin.site.urls)),
 
     url(r'^', include('apps.meals.urls')),
 
     url(r'^api-auth/', include('rest_framework.urls',
-                               namespace='rest_framework'))
+                               namespace='rest_framework')),
 
+    url(r'^$', ApiRoot.as_view(), name='api-root')
 ]
