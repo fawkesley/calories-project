@@ -5,6 +5,16 @@ from apps.meals.serializers import MealSerializer, UserSerializer
 from apps.meals.models import Meal
 
 
+class AllowAnyCreateAndSuperuserList(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.method == 'POST':
+            return True
+
+        elif request.method == 'GET':
+            return request.user and request.user.is_authenticated() \
+                and request.user.is_superuser
+
+
 class MealGetQuerySetMixin(object):
     def get_queryset(self):
         """
@@ -70,9 +80,8 @@ class MealDetail(MealGetQuerySetMixin, generics.RetrieveUpdateDestroyAPIView):
     serializer_class = MealSerializer
 
 
-class UserList(generics.CreateAPIView):
-    # AllowAny is OK as it's unauthenticated & create-only
-    permission_classes = (permissions.AllowAny,)
+class UserList(generics.ListCreateAPIView):
+    permission_classes = (AllowAnyCreateAndSuperuserList,)
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
